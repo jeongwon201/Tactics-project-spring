@@ -1,0 +1,199 @@
+//전역 변수
+var sceneList = new Object();
+
+var habList = new Array();
+
+var sceneJson;
+
+var ph_num = 1;
+var pa_num = 1;
+
+var scene_num = 1;
+
+var offsetSave = function() {
+	var pc = document.querySelector(".player-container");
+	
+	if (oneClick) {
+		oneClick = false;
+		var ph = pc.querySelectorAll(".home");
+		var pa = pc.querySelectorAll(".away");
+		var ball = pc.querySelector(".ball");
+
+		var habInfo = new Object();
+		var offsetList = new Array();
+
+		for (j = 0; j < ph.length; j++) {
+			var offsetInfo = new Object();
+
+			offsetInfo.x = ph[j].style.left;
+			offsetInfo.y = ph[j].style.top;
+
+			offsetList.push(offsetInfo);
+		}
+
+		habInfo.home = offsetList;
+		offsetList = [];
+
+		for (j = 0; j < pa.length; j++) {
+			var offsetInfo = new Object();
+
+			offsetInfo.x = pa[j].style.left;
+			offsetInfo.y = pa[j].style.top;
+
+			offsetList.push(offsetInfo);
+		}
+		habInfo.away = offsetList;
+		offsetList = [];
+
+		var ballOffsetInfo = new Object();
+		ballOffsetInfo.x = ball.style.left;
+		ballOffsetInfo.y = ball.style.top;
+
+		offsetList.push(ballOffsetInfo);
+		habInfo.ball = offsetList;
+		ballOffsetInfo = [];
+
+		habList.push(habInfo);
+		/*console.log("offsetList : " + offsetList);
+		console.log("habInfo : " + habInfo);
+		console.log("habList : " + habList);*/
+
+		sceneList.scene1 = habList;
+	} else {
+		return;
+	}
+}
+
+// 선수, 공 DND
+window.addEventListener("load", function() {
+	var section = document.querySelector("#main");
+
+	var container = section.querySelector(".player-container");
+
+	var dragging = false;
+	var offset = { x: 0, y: 0 };
+	var current = null;
+	var left = container.offsetLeft;
+	var top = container.offsetTop;
+
+	section.onmousedown = function(e) {
+		if (e.target.classList.contains("clone-player")) {
+			return;
+		} else {
+			if (e.target.classList.contains("player", "ball")) {
+				dragging = true;
+				current = e.target;
+				offset.x = e.offsetX;
+				offset.y = e.offsetY;
+			}
+		}
+	}
+
+	section.onmousemove = function(e) {
+		if (!dragging) return;
+
+		var x = e.pageX - offset.x - left;
+		var y = e.pageY - offset.y - top;
+
+		current.style.left = x + "px"; // 단위를 사용해야만 적용됨
+		current.style.top = y + "px";
+	}
+
+	section.onmouseup = function(e) {
+		dragging = false;
+	}
+});
+
+//선수 추가 및 삭제
+window.addEventListener("load", function() {
+	//home 선수 추가, 삭제
+	$(".home-add").click(function() {
+		ph_num++;
+		$(".player-container").append("<div id='ph" + ph_num + "' class='player home'></div>");
+		offsetSave();
+	});
+
+	$(".home-delete").click(function() {
+		if (ph_num <= 1) {
+			return;
+		}
+		$("#ph" + ph_num).remove();
+		ph_num--;
+	});
+
+	//away 선수 추가 삭제
+	$(".away-add").click(function() {
+		pa_num++;
+		$(".player-container").append("<div id='pa" + pa_num + "' class='player away'></div>");
+	});
+
+	$(".away-delete").click(function() {
+		if (pa_num <= 1) {
+			return;
+		}
+		$("#pa" + pa_num).remove();
+		pa_num--;
+	});
+});
+
+//씬 추가 및 삭제
+window.addEventListener("load", function() {
+	$(".add-scene").click(function() {
+		scene_num++;
+		$(".scene-container").append("<input type='radio' id=scene" + scene_num + " name='scene' checked><label for='scene" + scene_num + "' id='label" + scene_num + "'>" + scene_num + "</label>");
+		/*
+		// 씬 추가 시 이전 씬의 선수 반투명 처리
+		var clonePlayer = $('.player').clone();
+		var originalPlayer = $('.player').clone();
+		$(".player").remove();
+		clonePlayer.addClass('clone-player');
+		clonePlayer.appendTo('.player-container');
+		originalPlayer.appendTo('.player-container');*/
+	});
+
+	$(".delete-scene").click(function() {
+		if (scene_num <= 1) {
+			return;
+		}
+		$("#scene" + scene_num).remove();
+		$("#label" + scene_num).remove();
+		scene_num--;
+		$("#scene" + scene_num).prop("checked", true);
+	});
+});
+
+// 씬 전환
+window.addEventListener("load", function() {
+	var sc = document.querySelector(".scene-container");
+
+	var oneClick = true;
+
+	sc.onclick = function(e) {
+		console.log(e.target.id);
+		if (e.target.id == 'scene1') {
+			
+		} else {
+
+		}
+	};
+
+	//현재 씬의 선수 위치 값 저장 함수
+});
+
+//전술 재생, 일시정시, 정지
+window.addEventListener("load", function() {
+	var pc = document.querySelector(".play-container");
+
+	pc.onclick = function(e) {
+	};
+});
+
+//저장 및 초기화
+window.addEventListener("load", function() {
+	var sc = document.querySelector(".save-container");
+
+	sc.onclick = function(e) {
+		sceneJson = JSON.stringify(sceneList);
+		console.log(sceneJson);
+	};
+});

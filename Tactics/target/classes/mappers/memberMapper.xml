@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<!-- 회원가입 -->
+	<insert id="register">
+	    INSERT INTO TACTICS_MEMBER(   USERID 
+	   					       , USERPW 
+	   					       , USERNAME 	)
+	                  VALUES(    #{userId} 
+	                 		   , #{userPw}
+	                 		   , #{userName})
+   
+    </insert>
+    
+    <!-- 로그인 -->
+	<select id="login" resultType="com.spring.vo.MemberVO">
+		SELECT USERID, USERPW, USERNAME
+		  FROM TACTICS_MEMBER
+		 WHERE USERID = #{userId}
+		 <!--  AND USERPW = #{USERPW} -->
+	</select>
+	
+	
+	<!-- 회원정보 수정 -->
+	<update id="memberUpdate">
+		UPDATE TACTICS_MEMBER SET 
+		<!-- USERPW = #{USERPW}, -->
+		USERNAME = #{userName}
+		WHERE USERID = #{userId}
+	</update>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="memberDelete">
+		DELETE FROM TACTICS_MEMBER
+		WHERE USERID = #{userId}
+		 <!--  AND USERPW = #{USERPW} --> 
+	</delete>
+	
+	<!-- 패스워드 체크 -->
+	<select id="passChk" resultType="int">
+		SELECT COUNT(*) FROM TACTICS_MEMBER
+		WHERE USERID = #{userId}
+		  AND USERPW = #{userPw}
+	</select>
+	
+		<!-- 아이디 중복 체크 -->
+	<select id="idChk" resultType="int">
+		SELECT COUNT(*) FROM TACTICS_MEMBER
+		WHERE USERID = #{userId}
+	</select>
+</mapper>
