@@ -61,3 +61,11 @@
 .clone {
 	opacity: 0.3;
 }
+
+#select-tactics {
+	width: 60%;
+}
+
+#text-save-name {
+	width: 60%;
+}

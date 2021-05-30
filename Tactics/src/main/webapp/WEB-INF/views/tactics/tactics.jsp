@@ -19,7 +19,7 @@
 			<div class="col-md-12">
 				<hr />
 			</div>
-
+			
 			<div class="col-md-12">
 				<div class="play-container col-md-2 text-center">
 					<button id="btn-play" class="btn btn-default">
@@ -32,10 +32,20 @@
 						<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
 					</button>
 				</div>
-				<div class="col-md-8"></div>
-				<div class="save-container col-md-2 text-center">
-					<button class="btn btn-default">저장</button>
-					<button class="btn btn-default">초기화</button>
+				<div class="load-container col-md-5 text-center form-inline">
+					<select id="select-tactics" class="form-control">
+						<option selected="selected">불러올 전술을 선택하세요.</option>
+						<c:forEach items="${tacticsList}" var="tacticsList">
+							<option value="${tacticsList.title}">${tacticsList.title}</option>
+						</c:forEach>
+					</select>
+					<button id="btn-load" class="btn btn-default">불러오기</button>
+				</div>
+				
+				<div class="save-container col-md-5 text-center form-inline">
+					<input type="text" id="text-save-name" class="form-control" placeholder="전술 이름을 입력해주세요." value="">
+					<button id="btn-save" class="btn btn-success">저장</button>
+					<button id="btn-reset" class="btn btn-danger">초기화</button>
 				</div>
 			</div>
 
