@@ -129,7 +129,7 @@ public class TacticsController {
 			String textSaveName = req.getParameter("textSaveName");
 			String scene = req.getParameter("sceneJson");
 
-			String fileName = "C:\\Users\\jeong\\git\\Project\\Tactics\\src\\main\\webapp\\resources\\saveFolder\\" + user_id + "_" + textSaveName
+			String fileName = "C:\\Users\\jeong\\git\\Project\\Tactics\\src\\main\\webapp\\resources\\save\\" + user_id + "_" + textSaveName
 					+ ".txt";
 
 			try {
