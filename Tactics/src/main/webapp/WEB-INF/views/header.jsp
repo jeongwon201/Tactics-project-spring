@@ -25,8 +25,8 @@
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<c:if test="${member == null}">
-						<li><a onclick="alert('로그인 후 이용 가능합니다.');">전술 만들기</a></li>
-						<li><a onclick="alert('로그인 후 이용 가능합니다.');">전술 게시판</a></li>
+						<li><a href="" onclick="alert('로그인 후 이용 가능합니다.');">전술 만들기</a></li>
+						<li><a href="" onclick="alert('로그인 후 이용 가능합니다.');">전술 게시판</a></li>
 					</c:if>
 					<c:if test="${member != null}">
 						<li><a href="/tactics/tactics">전술 만들기</a></li>

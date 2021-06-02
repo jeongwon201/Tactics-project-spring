@@ -9,16 +9,25 @@ var scene_num = 1; // 총 씬 개수
 var scene_cur = 1; // 현재 씬 위치
 
 // init ---------------------------------------------------------------------------------------------
-sceneList.push($(".player-container").html().toString());
+var sceneObjInit = new Object();
+sceneObjInit.sceneNum = scene_cur;
+sceneObjInit.scene = $(".player-container").html().toString();
+sceneList.push(sceneObjInit);
 
 // function -----------------------------------------------------------------------------------------
 var sceneAdd = function() {
-	sceneList.push($(".player-container").html().toString());
+	var sceneObj = new Object();
+	sceneObj.sceneNum = scene_num;
+	sceneObj.scene = $(".player-container").html().toString();
+	sceneList.push(sceneObj);
 }
 
 var sceneReplace = function() {
+	var sceneObj = new Object();
 	$(".clone").remove();
-	sceneList.splice((scene_cur) - 1, 1, $(".player-container").html().toString());
+	sceneObj.sceneNum = scene_cur;
+	sceneObj.scene = $(".player-container").html().toString();
+	sceneList.splice((scene_cur) - 1, 1, sceneObj);
 }
 
 var sceneDelete = function() {
@@ -29,18 +38,21 @@ var sceneDelete = function() {
 var findCur = function() {
 	var cur_radio = $("input:radio[name='scene']:checked").val();
 	scene_cur = cur_radio;
+}
 
-	$(".btn-container").html("<h5>장면 추가 시 선수를 추가/생성할 수 없습니다.</h4>");
+var radioCheck = function() {
+	$(".scene-label").removeClass("active");
+	$("#label" + scene_cur).addClass("active");
 }
 
 var cloneIdChange = function() {
 	for (i = 1; i < (ph_num + 1); i++) {
-		$("#ph" + i + "-" + (scene_num - 1)).attr('id', 'phc' + i);
+		$("#ph" + i + "-" + (scene_cur - 1)).attr('id', 'phc' + i);
 	}
 	for (i = 1; i < (pa_num + 1); i++) {
-		$("#pa" + i + "-" + (scene_num - 1)).attr('id', 'pac' + i);
+		$("#pa" + i + "-" + (scene_cur - 1)).attr('id', 'pac' + i);
 	}
-	$("#ball-" + (scene_num - 1)).attr('id', 'ballc');
+	$("#ball-" + (scene_cur - 1)).attr('id', 'ballc');
 }
 
 var originalIdChange = function() {
@@ -53,11 +65,6 @@ var originalIdChange = function() {
 	$("#ball-" + (scene_num - 1)).attr('id', 'ball-' + scene_num);
 }
 
-var radioCheck = function() {
-	$(".scene-label").removeClass("active");
-	$("#label" + scene_cur).addClass("active");
-}
-
 var play = function() {
 	var strSceneList = "";
 
@@ -67,7 +74,7 @@ var play = function() {
 	var cur = 1;
 
 	for (i = 0; i < sceneList.length; i++) {
-		strSceneList += (sceneList[i]);
+		strSceneList += (sceneList[i].scene);
 	}
 	$(".player-container").html(strSceneList);
 	$(".player").hide();
@@ -81,7 +88,7 @@ var play = function() {
 	$("#ball-1").show();
 
 	for (i = 1; i < scene_num + 1; i++) {
-		(function(x) {
+		(function() {
 			for (j = 1; j < ph_num + 1; j++) {
 				x = $("#ph" + j + "-" + (i + 1)).css("left");
 				y = $("#ph" + j + "-" + (i + 1)).css("top");
@@ -109,11 +116,11 @@ var play = function() {
 var playAfter = function() {
 	$('.player').remove();
 	if (scene_cur == 1) {
-		$('.player-container').html(sceneList[(scene_cur) - 1]);
+		$('.player-container').html(sceneList[(scene_cur) - 1].scene);
 	} else {
-		$('.player-container').html(sceneList[(scene_cur) - 1]);
+		$('.player-container').html(sceneList[(scene_cur) - 1].scene);
 		var originalPlayer = $(".player").clone();
-		$('.player-container').html(sceneList[(scene_cur) - 2]);
+		$('.player-container').html(sceneList[(scene_cur) - 2].scene);
 		$('.player').addClass('clone');
 		cloneIdChange();
 		originalPlayer.appendTo('.player-container');
@@ -124,16 +131,16 @@ var playAfter = function() {
 
 // 선수, 공 DND
 window.addEventListener("load", function() {
-	var section = document.querySelector("#main");
+	var section = document.querySelector("#section");
 
 	var container = section.querySelector(".player-container");
-
+	
 	var dragging = false;
-	var offset = { x: 0, y: 0 };
+	var offset = {x:0, y:0};
 	var current = null;
 	var left = container.offsetLeft;
 	var top = container.offsetTop;
-
+	
 	section.onmousedown = function(e) {
 		if (e.target.classList.contains("clone")) {
 			return;
@@ -143,9 +150,6 @@ window.addEventListener("load", function() {
 				current = e.target;
 				offset.x = e.offsetX;
 				offset.y = e.offsetY;
-
-				leftX = e.target.style.left;
-				topY = e.target.style.top;
 			}
 		}
 	}
@@ -153,14 +157,16 @@ window.addEventListener("load", function() {
 	section.onmousemove = function(e) {
 		if (!dragging) return;
 
-		var x = e.pageX - offset.x - left - 70;
-		var y = e.pageY - offset.y - top - 190;
+		var x = e.pageX - offset.x - left;
+		var y = e.pageY - offset.y - top;
 
 		current.style.left = x + "px"; // 단위를 사용해야만 적용됨
 		current.style.top = y + "px";
+		
+		console.log(x + ", " + y);
 	}
 
-	section.onmouseup = function(e) {
+	section.onmouseup = function() {
 		dragging = false;
 	}
 });
@@ -205,15 +211,19 @@ window.addEventListener("load", function() {
 //씬 추가 및 삭제
 window.addEventListener("load", function() {
 	$(".add-scene").click(function() {
+		if(scene_num == 1) {
+		$(".btn-container").html("<h5>장면 추가 시 선수를 추가/생성할 수 없습니다.</h4>");
+		}
+			
 		sceneReplace();
-		sceneAdd();
 		scene_num++;
+		sceneAdd();
 
 		$(".scene-container").append("<label class='btn btn-success scene-label' id='label" + scene_num + "'><input type='radio' id=scene" + scene_num + " name='scene' class='scene-radio' value='" + scene_num + "' checked>" + scene_num + "</label>");
 		findCur();
 		radioCheck();
 		// 씬 추가 시 이전 씬의 선수 반투명 처리
-		$(".player-container").html(sceneList[(scene_cur) - 2]);
+		$(".player-container").html(sceneList[(scene_cur) - 2].scene);
 		var originalPlayer = $('.player').clone();
 		$(".player").addClass('clone');
 		cloneIdChange();
@@ -231,14 +241,14 @@ window.addEventListener("load", function() {
 			findCur();
 			radioCheck();
 			if (scene_cur == 1) {
-				$('.player-container').html(sceneList[(scene_cur) - 1]);
+				$('.player-container').html(sceneList[(scene_cur) - 1].scene);
 			} else {
-				$('.player-container').html(sceneList[(scene_cur) - 1]);
-				var originalPlayer = $(".player").clone();
-				$('.player-container').html(sceneList[(scene_cur) - 2]);
+				$('.player-container').html(sceneList[(scene_cur) - 1].scene);
+				var originalPlayer = $('.player').clone();
+				$('.player-container').html(sceneList[(scene_cur) - 2].scene);
 				$('.player').addClass('clone');
 				cloneIdChange();
-				originalPlayer.appendTo('.player-container');
+				$('.player-container').append(originalPlayer);
 			}
 
 		} else {
@@ -263,14 +273,14 @@ window.addEventListener("load", function() {
 				findCur();
 				radioCheck();
 				if (scene_cur == 1) {
-					$('.player-container').html(sceneList[(scene_cur) - 1]);
+					$('.player-container').html(sceneList[0].scene);
 				} else {
-					$('.player-container').html(sceneList[(scene_cur) - 1]);
-					var originalPlayer = $(".player").clone();
-					$('.player-container').html(sceneList[(scene_cur) - 2]);
+					$('.player-container').html(sceneList[(scene_cur) - 1].scene);
+					var originalPlayer = $('.player').clone();
+					$('.player-container').html(sceneList[(scene_cur) - 2].scene);
 					$('.player').addClass('clone');
 					cloneIdChange();
-					originalPlayer.appendTo('.player-container');
+					$('.player-container').append(originalPlayer);
 				}
 			} else {
 				return;
@@ -287,12 +297,12 @@ window.addEventListener("load", function() {
 	var btnPause = document.querySelector("#btn-pause");
 	var btnStop = document.querySelector("#btn-stop");
 
-	btnPlay.onclick = function(e) {
+	btnPlay.onclick = function() {
 		sceneReplace();
 		play();
 	};
 
-	btnPause.onclick = function(e) {
+	btnPause.onclick = function() {
 		for (i = 1; i < (ph_num + 1); i++) {
 			$("#ph" + i + "-1").stop(true, false);
 		}
@@ -305,12 +315,91 @@ window.addEventListener("load", function() {
 	};
 });
 
-//불러오기
+//불러오기, 삭제
 window.addEventListener("load", function() {
 	var btnLoad = document.querySelector("#btn-load");
+	var btnDelete = document.querySelector("#btn-delete");
 	
+	// 불러오기
 	btnLoad.onclick = function() {
+		var selected = $("#select-tactics option:selected").val();
 		
+		if(selected == '전술을 선택하세요.') {
+			alert('불러올 전술을 선택하세요.');
+			return false;
+		} else {
+			$.ajax({
+				type: "POST",
+				data: {title : selected},
+				url: "tacticsLoad",
+				success: function(data) {
+					alert('불러오기 완료');
+					
+					var jsonData = JSON.parse(data);
+					sceneList = [];
+					for(i=0; i<jsonData.length -1; i++) {
+						var sceneObj = new Object();
+						sceneObj.sceneNum = i+1;
+						sceneObj.scene = jsonData[i].scene;
+						sceneList.push(sceneObj);
+					}
+					ph_num = jsonData[jsonData.length -1].ph_num;
+					pa_num = jsonData[jsonData.length -1].pa_num;
+					scene_num = jsonData[jsonData.length -1].scene_num;
+					scene_cur = jsonData[jsonData.length -1].scene_num;
+					
+					$('.scene-label').remove();
+					for(i=0; i<scene_num; i++) {
+						$(".scene-container").append("<label class='btn btn-success scene-label' id='label" + (i+1) + "'><input type='radio' id=scene" + (i+1) + " name='scene' class='scene-radio' value='" + (i+1) + "' checked>" + (i+1) + "</label>");
+					}
+					radioCheck();
+					
+					$('.player').remove();
+					$('.player-container').html(sceneList[(scene_num) - 1].scene);
+					var originalPlayer = $('.player').clone();
+					$('.player-container').html(sceneList[(scene_num) - 2].scene);
+					$('.player').addClass('clone');
+					cloneIdChange();
+					$('.player-container').append(originalPlayer);
+					
+					$("#text-save-name").val(selected);
+					
+					if(scene_num == 1) {
+						$(".btn-container").html("<h5>장면 추가 시 선수를 추가/생성할 수 없습니다.</h4>");
+					}
+				},
+				error: function() {
+					alert("AJAX ERROR, 관리자에게 문의하세요.");
+				}
+			});
+		}
+	}
+	
+	// 삭제
+	btnDelete.onclick = function() {
+		var selected = $("#select-tactics option:selected").val();
+		
+		if(selected == '전술을 선택하세요.') {
+			alert('삭제할 전술을 선택하세요.');
+			return false;
+		} else {
+			$.ajax({
+				type: "POST",
+				data: {title : selected},
+				url: "tacticsDelete",
+				success: function(result) {
+					if(result == 1) {
+						alert('삭제 완료');
+					} else {
+						alert('삭제 실패, 관리자에게 문의하세요.');
+					}
+					window.location.reload();
+				},
+				error: function() {
+					alert("AJAX ERROR, 관리자에게 문의하세요.");
+				}
+			});
+		}
 	}
 });
 
@@ -320,19 +409,32 @@ window.addEventListener("load", function() {
 	var btnSave = sc.querySelector("#btn-save")
 	var btnReset = sc.querySelector("#btn-reset")
 	btnSave.onclick = function() {
+		sceneReplace();
+		
+		var sceneObj = new Object();
+		sceneObj.ph_num = ph_num;
+		sceneObj.pa_num = pa_num;
+		sceneObj.scene_num = scene_num;
+		
+		sceneList.push(sceneObj);
+		
 		sceneJson = JSON.stringify(sceneList);
 		var textSaveName = $("#text-save-name").val();
-		alert(textSaveName);
 		
 		$.ajax({
 			type: "POST",
 			data: {sceneJson : sceneJson, textSaveName : textSaveName},
 			url: "tacticsSave",
 			success: function(data) {
-				alert("SUCCESS" + data);
+				if(data == 1) {
+					alert("저장 성공");
+				} else {
+					alert("ERROR, 관리자에게 문의하세요.")
+				}
+				window.location.reload();
 			},
 			error: function() {
-				alert("ERROR");
+				alert("AJAX ERROR, 관리자에게 문의하세요.");
 			}
 		});
 	};

@@ -20,129 +20,139 @@ import com.spring.vo.MemberVO;
 public class MemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
+
 	@Inject
 	MemberService service;
-	
+
 	@Inject
 	BCryptPasswordEncoder pwdEncoder;
-	
+
 	// 회원가입 get
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void getRegister() throws Exception {
 		logger.info("get register");
 	}
-	
+
 	// 회원가입 post
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String postRegister(MemberVO vo) throws Exception {
+	@ResponseBody
+	public int postRegister(MemberVO vo) throws Exception {
 		logger.info("post register");
-		int result = service.idChk(vo);
+		int result = 0;
+		int resultChk = service.idChk(vo);
 		try {
-			if(result == 1) {
-				return "/member/register";
-			}else if(result == 0) {
+			if (resultChk == 1) {
+				result = 0;
+			} else if (resultChk == 0) {
 				String inputPass = vo.getUserPw();
 				String pwd = pwdEncoder.encode(inputPass);
 				vo.setUserPw(pwd);
-				
+
 				service.register(vo);
+				result = 1;
 			}
-			// 요기에서~ 입력된 아이디가 존재한다면 -> 다시 회원가입 페이지로 돌아가기 
-			// 존재하지 않는다면 -> register
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
-		return "redirect:/";
+		return result;
 	}
-	
+
 	// 로그인 post
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception{
+	public String login(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception {
 		logger.info("post login");
-	
+
 		session.getAttribute("member");
 		MemberVO login = service.login(vo);
 		boolean pwdMatch;
-		if(login != null) {
-		pwdMatch = pwdEncoder.matches(vo.getUserPw(), login.getUserPw());
+		if (login != null) {
+			pwdMatch = pwdEncoder.matches(vo.getUserPw(), login.getUserPw());
 		} else {
-		pwdMatch = false;
+			pwdMatch = false;
 		}
 
-		if(login != null && pwdMatch == true) {
-		session.setAttribute("member", login);
+		if (login != null && pwdMatch == true) {
+			session.setAttribute("member", login);
 		} else {
-		session.setAttribute("member", null);
-		rttr.addFlashAttribute("msg", false);
+			session.setAttribute("member", null);
+			rttr.addFlashAttribute("msg", false);
 		}
-		
-		
+
 		return "redirect:/";
 	}
-	
+
 	// 로그아웃 post
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) throws Exception{
-		
+	public String logout(HttpSession session) throws Exception {
+
 		session.invalidate();
-		
+
 		return "redirect:/";
 	}
-	
+
 	// 회원정보 수정 get
-	@RequestMapping(value="/memberUpdateView", method = RequestMethod.GET)
-	public String registerUpdateView() throws Exception{
+	@RequestMapping(value = "/memberUpdateView", method = RequestMethod.GET)
+	public String registerUpdateView() throws Exception {
 		return "member/memberUpdateView";
 	}
-	
+
 	// 회원정보 수정  post
-	@RequestMapping(value="/memberUpdate", method = RequestMethod.POST)
-	public String registerUpdate(MemberVO vo, HttpSession session) throws Exception{
-		
-/*		MemberVO login = service.login(vo);
-		
-		boolean pwdMatch = pwdEncoder.matches(vo.getUserPw(), login.getUserPw());
-		if(pwdMatch) {
+	@RequestMapping(value = "/memberUpdate", method = RequestMethod.POST)
+	@ResponseBody
+	public int registerUpdate(MemberVO vo, HttpSession session) throws Exception {
+		int result = 0;
+		try {
 			service.memberUpdate(vo);
+			result = 1;
 			session.invalidate();
-		}else {
-			return "member/memberUpdateView";
-		}*/
-		service.memberUpdate(vo);
-		session.invalidate();
-		return "redirect:/";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
-	
+
+	// 회원정보 수정 - pw 수정
+	@ResponseBody
+	@RequestMapping(value = "/memberUpdatePw", method = RequestMethod.POST)
+	public int memberUpdatePw(MemberVO vo) throws Exception {
+		int result = 0;
+		
+		MemberVO login = service.login(vo);
+		boolean pwdChk = pwdEncoder.matches(vo.getUserPw(), login.getUserPw());
+		if(pwdChk == true) {
+		}
+		return result;
+	}
+
 	// 회원 탈퇴 get
-	@RequestMapping(value="/memberDeleteView", method = RequestMethod.GET)
-	public String memberDeleteView() throws Exception{
+	@RequestMapping(value = "/memberDeleteView", method = RequestMethod.GET)
+	public String memberDeleteView() throws Exception {
 		return "member/memberDeleteView";
 	}
-	
+
 	// 회원 탈퇴 post
-	@RequestMapping(value="/memberDelete", method = RequestMethod.POST)
-	public String memberDelete(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception{
-		
+	@RequestMapping(value = "/memberDelete", method = RequestMethod.POST)
+	public String memberDelete(MemberVO vo, HttpSession session, RedirectAttributes rttr) throws Exception {
+
 		service.memberDelete(vo);
 		session.invalidate();
-		
+
 		return "redirect:/";
 	}
-	
+
 	// 패스워드 체크
 	@ResponseBody
-	@RequestMapping(value="/passChk", method = RequestMethod.POST)
+	@RequestMapping(value = "/passChk", method = RequestMethod.POST)
 	public boolean passChk(MemberVO vo) throws Exception {
 
 		MemberVO login = service.login(vo);
 		boolean pwdChk = pwdEncoder.matches(vo.getUserPw(), login.getUserPw());
 		return pwdChk;
 	}
-	
+
 	// 아이디 중복 체크
 	@ResponseBody
-	@RequestMapping(value="/idChk", method = RequestMethod.POST)
+	@RequestMapping(value = "/idChk", method = RequestMethod.POST)
 	public int idChk(MemberVO vo) throws Exception {
 		int result = service.idChk(vo);
 		return result;

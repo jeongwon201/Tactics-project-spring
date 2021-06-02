@@ -19,8 +19,23 @@ public class TacticsServiceImpl implements TacticsService {
 		return dao.tacticsList(user_id);
 	}
 
+	@Override // 전술 불러오기
+	public TacticsVO tacticsLoad(TacticsVO tacticsVO) throws Exception {
+		return dao.tacticsLoad(tacticsVO);
+	}
+	
+	@Override // 전술 삭제
+	public void tacticsDelete(TacticsVO tacticsVO) throws Exception {
+		dao.tacticsDelete(tacticsVO);
+	}
+	
 	@Override // 전술 저장
 	public void tacticsInsert(TacticsVO tacticsVO) throws Exception {
 		dao.tacticsInsert(tacticsVO);
+	}
+	
+	@Override // 전술 중복 확인
+	public int tacticsChk(TacticsVO chkTacticsVO) throws Exception {
+		return dao.tacticsChk(chkTacticsVO);
 	}
 }

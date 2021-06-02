@@ -12,7 +12,6 @@
 			$(".cencle").on("click", function(){
 				
 				location.href = "memberUpdateView";
-						    
 			})
 		
 			$("#submit").on("click", function(){
@@ -47,7 +46,7 @@
 	</script>
 	<body>
 		<%@include file="../header.jsp" %>
-		<section id="container">
+		<section id="container" class="container">
 			<form action="/member/memberDelete" method="post" id="delForm">
 				<div class="form-group has-feedback">
 					<label class="control-label" for="userId">아이디</label>

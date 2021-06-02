@@ -13,8 +13,8 @@
 
 <body>
 	<%@ include file="../header.jsp"%>
-
-	<main id="main" class="container">
+	
+	<section id="section" class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<hr />
@@ -23,23 +23,24 @@
 			<div class="col-md-12">
 				<div class="play-container col-md-2 text-center">
 					<button id="btn-play" class="btn btn-default">
-						<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-play"></span>
 					</button>
 					<button id="btn-pause" class="btn btn-default">
-						<span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-pause"></span>
 					</button>
 					<button id="btn-stop" class="btn btn-default">
-						<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-stop"></span>
 					</button>
 				</div>
 				<div class="load-container col-md-5 text-center form-inline">
 					<select id="select-tactics" class="form-control">
-						<option selected="selected">불러올 전술을 선택하세요.</option>
+						<option id="select-default" selected="selected">전술을 선택하세요.</option>
 						<c:forEach items="${tacticsList}" var="tacticsList">
 							<option value="${tacticsList.title}">${tacticsList.title}</option>
 						</c:forEach>
 					</select>
-					<button id="btn-load" class="btn btn-default">불러오기</button>
+					<button id="btn-load" class="btn btn-success">불러오기</button>
+					<button id="btn-delete" class="btn btn-danger">삭제</button>
 				</div>
 				
 				<div class="save-container col-md-5 text-center form-inline">
@@ -53,12 +54,10 @@
 				<hr />
 			</div>
 			<div class="col-md-12">
-				<div class="field-container stop-drag">
-					<div class="player-container">
-						<div id="ball-1" class="ball player"></div>
-						<div id="ph1-1" class="player home">1</div>
-						<div id="pa1-1" class="player away">1</div>
-					</div>
+				<div class="player-container">
+					<div id="ball-1" class="ball player"></div>
+					<div id="ph1-1" class="player home">1</div>
+					<div id="pa1-1" class="player away">1</div>
 				</div>
 			</div>
 			<div class="col-md-12">
@@ -90,7 +89,7 @@
 		<div class="col-md-12">
 			<hr />
 		</div>
-	</main>
+	</section>
 	<%@ include file="../footer.jsp"%>
 	<script src="/resources/js/tactics.js"></script>
 </body>

@@ -36,7 +36,6 @@
 	background: white;
 	top: 48.2%;
 	left: 48.7%;
-	overflow: hidden;
 }
 
 .ball-img {
@@ -56,6 +55,7 @@
 	width: 1140px;
 	height: 716px;
 	overflow: hidden;
+	background-image: url('/resources/images/field.png');
 }
 
 .clone {

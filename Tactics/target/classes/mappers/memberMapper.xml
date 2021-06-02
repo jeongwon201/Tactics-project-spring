@@ -26,7 +26,6 @@
 	<!-- 회원정보 수정 -->
 	<update id="memberUpdate">
 		UPDATE TACTICS_MEMBER SET 
-		<!-- USERPW = #{USERPW}, -->
 		USERNAME = #{userName}
 		WHERE USERID = #{userId}
 	</update>

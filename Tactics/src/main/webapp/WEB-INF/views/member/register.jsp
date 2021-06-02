@@ -33,7 +33,25 @@
 				if(idChkVal == "N"){
 					alert("중복확인 버튼을 눌러주세요.");
 				}else if(idChkVal == "Y"){
-					$("#regForm").submit();
+					if(confirm('입력하신 정보로 가입하시겠습니까?') == true) {
+						var frm = $('#regForm').serialize();
+						$.ajax({
+							url : "/member/register",
+							type : "post",
+							dataType : "json",
+							data : frm,
+							success : function(result){
+								if(result == 0){
+									alert("중복된 아이디입니다.");
+								}else if(result == 1){
+									alert("회원 가입이 완료되었습니다.");
+									location.replace("/");
+								}
+							}
+						});
+					} else {
+						return false;
+					}
 				}
 			});
 		})
@@ -62,7 +80,7 @@
 		
 		<main>
 			<section id="container" class="container">
-				<form action="/member/register" method="post" id="regForm">
+				<form id="regForm">
 					<div class="form-group has-feedback">
 						<label class="control-label" for="userId">아이디</label>
 						<input class="form-control" type="text" id="userId" name="userId" /> <br />
