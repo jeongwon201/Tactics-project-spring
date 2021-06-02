@@ -7,8 +7,7 @@
 <head>
 <title>Tactics</title>
 <%@ include file="/resources/include/head.jsp"%>
-<link href="/resources/css/tactics.css?after" rel="stylesheet"
-	type="text/css">
+<link href="/resources/css/tactics.css?after" rel="stylesheet" type="text/css">
 </head>
 
 <body>
