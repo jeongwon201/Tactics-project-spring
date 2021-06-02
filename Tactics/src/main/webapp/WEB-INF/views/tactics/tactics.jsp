@@ -53,7 +53,7 @@
 			<div class="col-md-12">
 				<hr />
 			</div>
-			<div class="col-md-12">
+			<div>
 				<div class="player-container">
 					<div id="ball-1" class="ball player"></div>
 					<div id="ph1-1" class="player home">1</div>
