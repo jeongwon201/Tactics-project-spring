@@ -61,8 +61,8 @@
 							<textarea id="content" name="content" class="chk form-control" title="내용을 입력하세요."><c:out value="${update.content}" /></textarea>
 						</div>
 						<div class="form-group">
-							<label class="control-label" for="writer">작성자</label>
-							<input class="form-control" type="text" id="writer" name="writer" value="${update.writer}" readonly="readonly"/>
+							<label class="control-label" for="userId">작성자</label>
+							<input class="form-control" type="text" id="userId" name="userId" value="${update.userId}" readonly="readonly"/>
 						</div>
 						<div class="form-group">
 							<label class="control-label" for="regdate">작성날짜</label>

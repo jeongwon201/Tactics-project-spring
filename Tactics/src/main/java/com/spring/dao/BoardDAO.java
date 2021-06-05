@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.spring.vo.BoardVO;
 import com.spring.vo.SearchCriteria;
+import com.spring.vo.TacticsVO;
 
 public interface BoardDAO {
 	// 게시글 작성
@@ -26,4 +27,10 @@ public interface BoardDAO {
 	
 	// 게시판 조회수
 	public void boardHit(int bno) throws Exception;
+	
+	//전술 찾기
+	public TacticsVO findTactics(TacticsVO tacticsVO) throws Exception;
+	
+	//전술 url 얻기
+	public String findTacticsUrl(int url) throws Exception;
 }

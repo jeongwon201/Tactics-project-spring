@@ -7,7 +7,7 @@
 	<!-- 셀렉트 박스 전술 리스트 출력 -->
 	<select id="tacticsList" parameterType="String" resultType="com.spring.vo.TacticsVO">
 		SELECT TITLE FROM TACTICS_TACTICS
-		WHERE USER_ID = #{user_id}
+		WHERE USERID = #{userId}
 		ORDER BY TNO DESC
 	</select>
 	
@@ -15,22 +15,22 @@
 	<select id="tacticsLoad" resultType="com.spring.vo.TacticsVO">
 		SELECT * FROM TACTICS_TACTICS
 		WHERE TITLE = #{title}
-		AND USER_ID = #{user_id}
+		AND USERID = #{userId}
 	</select>
 	
 	<!-- 전술 삭제 -->
 	<delete id="tacticsDelete">
 		DELETE FROM TACTICS_TACTICS
 		WHERE TITLE = #{title}
-		AND USER_ID = #{user_id}
+		AND USERID = #{userId}
 	</delete>
 	
 	<!-- 전술 저장 -->
 	<insert id="tacticsInsert">
 		INSERT INTO TACTICS_TACTICS(
-			TNO, TITLE, URL, USER_ID
+			TNO, TITLE, URL, USERID
 		) VALUES (
-			TACTICS_TACTICS_SEQ.NEXTVAL, #{title}, #{url}, #{user_id}
+			TACTICS_TACTICS_SEQ.NEXTVAL, #{title}, #{url}, #{userId}
 		)
 	</insert>
 	
@@ -38,6 +38,6 @@
 	<select id="tacticsChk" resultType="int">
 		SELECT count(*) FROM TACTICS_TACTICS
 		WHERE TITLE = #{title}
-		AND USER_ID = #{user_id}
+		AND USERID = #{userId}
 	</select>
 </mapper>

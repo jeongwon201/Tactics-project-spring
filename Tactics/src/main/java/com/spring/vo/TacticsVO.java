@@ -4,7 +4,7 @@ public class TacticsVO {
 	private int tno;
 	private String title;
 	private String url;
-	private String user_id;
+	private String userId;
 
 	public int getTno() {
 		return tno;
@@ -30,12 +30,12 @@ public class TacticsVO {
 		this.url = url;
 	}
 
-	public String getUser_id() {
-		return user_id;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 }

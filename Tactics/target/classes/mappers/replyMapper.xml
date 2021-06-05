@@ -7,23 +7,23 @@
 	<!-- 댓글 조회 -->
 	<select id="readReply" resultType="com.spring.vo.ReplyVO">
     	SELECT
-    		  RNO, CONTENT, WRITER, REGDATE
+    		  RNO, CONTENT, USERID, REGDATE
     	 FROM TACTICS_REPLY
     	WHERE BNO = #{bno}
 	</select>
 	
 	<!-- 댓글 작성 -->
-	<insert id="writeReply">
+	<insert id="writeReply" parameterType="com.spring.vo.ReplyVO">
 		INSERT INTO TACTICS_REPLY(
 		BNO
 		, RNO
 		, CONTENT
-		, WRITER
+		, USERID
 		)
 		VALUES( #{bno}
 		, TACTICS_REPLY_SEQ.NEXTVAL
 		, #{content}
-		, #{writer} )
+		, #{userId} )
 	</insert>
 
 	<!-- 댓글 수정 -->
@@ -45,7 +45,7 @@
 		BNO
 		, RNO
 		, CONTENT
-		, WRITER
+		, USERID
 		, REGDATE
 		FROM TACTICS_REPLY
 		WHERE RNO = #{rno}

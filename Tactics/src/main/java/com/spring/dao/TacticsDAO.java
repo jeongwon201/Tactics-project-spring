@@ -6,7 +6,7 @@ import com.spring.vo.TacticsVO;
 
 public interface TacticsDAO {
 	// 내 전술 목록
-	public List<TacticsVO> tacticsList(String user_id) throws Exception;
+	public List<TacticsVO> tacticsList(String userId) throws Exception;
 
 	// 전술 불러오기
 	public TacticsVO tacticsLoad(TacticsVO tacticsVO) throws Exception;

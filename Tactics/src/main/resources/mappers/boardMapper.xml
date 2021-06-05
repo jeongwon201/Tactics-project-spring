@@ -5,23 +5,23 @@
 <mapper namespace="boardMapper">
 	
 	<insert id="insert">
-		INSERT INTO TACTICS_BOARD(BNO, TITLE, CONTENT, WRITER)
-		VALUES(TACTICS_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{writer})
+		INSERT INTO TACTICS_BOARD(BNO, TITLE, CONTENT, USERID, TNO)
+		VALUES(TACTICS_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{userId}, #{tno})
 	</insert>
 	
 	<select id="list" resultType="com.spring.vo.BoardVO">
-		SELECT BNO, TITLE, WRITER, REGDATE FROM TACTICS_BOARD
+		SELECT BNO, TITLE, USERID, REGDATE FROM TACTICS_BOARD
 		ORDER BY BNO DESC
 	</select>
 	
 	<select id="read" parameterType="int" resultType="com.spring.vo.BoardVO">
-		SELECT BNO, TITLE, CONTENT, WRITER, REGDATE FROM TACTICS_BOARD
+		SELECT BNO, TITLE, CONTENT, USERID, REGDATE, TNO FROM TACTICS_BOARD
 		WHERE BNO = #{bno}
 	</select>
 
 	<update id="update" parameterType="com.spring.vo.BoardVO">
 		UPDATE TACTICS_BOARD
-		SET TITLE = #{title}, CONTENT = #{content}
+		SET TITLE = #{title}, CONTENT = #{content}, TNO = #{tno}
 		WHERE BNO = #{bno}
 	</update>
 
@@ -31,8 +31,8 @@
 	</delete>
 	
 	<select id="listPage" resultType="com.spring.vo.BoardVO" parameterType="com.spring.vo.SearchCriteria">
-		SELECT BNO, TITLE, CONTENT, WRITER, REGDATE, HIT
-		FROM (SELECT BNO, TITLE, CONTENT, WRITER, REGDATE, HIT, ROW_NUMBER() OVER(ORDER BY BNO DESC) AS RNUM
+		SELECT BNO, TITLE, CONTENT, USERID, REGDATE, HIT, TNO
+		FROM (SELECT BNO, TITLE, CONTENT, USERID, REGDATE, HIT, TNO, ROW_NUMBER() OVER(ORDER BY BNO DESC) AS RNUM
 		      FROM TACTICS_BOARD
 		      WHERE 1=1 <include refid="search"></include>) TACTICS
 		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
@@ -51,7 +51,7 @@
 		<if test="searchType != null">
 			<if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
 			<if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
-			<if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'w'.toString()">AND USERID LIKE '%' || #{keyword} || '%'</if>
 			<if test="searchType == 'tc'.toString()">AND (TITLE LIKE '%' || #{keyword} || '%') or (CONTENT LIKE '%' || #{keyword} || '%')</if>
 		</if>
 	</sql>
@@ -63,4 +63,14 @@
 		WHERE BNO = #{bno}
 	</update>
 	
+	<select id="findTactics" resultType="com.spring.vo.TacticsVO">
+		SELECT * FROM TACTICS_TACTICS
+		WHERE USERID = #{userId}
+		AND TITLE = #{title}
+	</select>
+	
+	<select id="findTacticsUrl" parameterType="int" resultType="String">
+		SELECT URL FROM TACTICS_TACTICS
+		WHERE TNO = #{tno}
+	</select>
 </mapper>

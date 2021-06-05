@@ -6,9 +6,10 @@ public class BoardVO {
 	private int bno;
 	private String title;
 	private String content;
-	private String writer;
+	private String userId;
 	private Date regdate;
 	private int hit;
+	private int tno;
 	
 	public int getBno() {
 		return bno;
@@ -28,11 +29,11 @@ public class BoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getWriter() {
-		return writer;
+	public String getUserId() {
+		return userId;
 	}
-	public void setWriter(String writer) {
-		this.writer = writer;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public Date getRegdate() {
 		return regdate;
@@ -45,5 +46,11 @@ public class BoardVO {
 	}
 	public void setHit(int hit) {
 		this.hit = hit;
+	}
+	public int getTno() {
+		return tno;
+	}
+	public void setTno(int tno) {
+		this.tno = tno;
 	}
 }

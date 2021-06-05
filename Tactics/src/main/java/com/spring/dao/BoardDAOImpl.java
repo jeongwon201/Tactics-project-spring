@@ -9,37 +9,38 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.vo.BoardVO;
 import com.spring.vo.SearchCriteria;
+import com.spring.vo.TacticsVO;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO {
 
 	@Inject
 	private SqlSession sqlSession;
-	
+
 	// 게시글 작성
 	@Override
 	public void write(BoardVO boardVO) throws Exception {
 		sqlSession.insert("boardMapper.insert", boardVO);
 	}
-	
+
 	// 게시물 목록 조회
 	@Override
 	public List<BoardVO> list(SearchCriteria scri) throws Exception {
 		return sqlSession.selectList("boardMapper.listPage", scri);
 	}
-	
+
 	//게시물 총 갯수
 	@Override
 	public int listCount(SearchCriteria scri) throws Exception {
 		return sqlSession.selectOne("boardMapper.listCount", scri);
 	}
-	
+
 	// 게시물 조회
 	@Override
 	public BoardVO read(int bno) throws Exception {
 		return sqlSession.selectOne("boardMapper.read", bno);
 	}
-	
+
 	// 게시물 수정
 	@Override
 	public void update(BoardVO boardVO) throws Exception {
@@ -51,11 +52,23 @@ public class BoardDAOImpl implements BoardDAO {
 	public void delete(int bno) throws Exception {
 		sqlSession.delete("boardMapper.delete", bno);
 	}
-	
+
 	// 게시판 조회수
 	@Override
 	public void boardHit(int bno) throws Exception {
 		// TODO Auto-generated method stub
 		sqlSession.update("boardMapper.boardHit", bno);
+	}
+
+	//전술 찾기
+	@Override
+	public TacticsVO findTactics(TacticsVO tacticsVO) throws Exception {
+		return sqlSession.selectOne("boardMapper.findTactics", tacticsVO);
+	}
+
+	//전술 url 얻기
+	@Override
+	public String findTacticsUrl(int url) throws Exception {
+		return sqlSession.selectOne("boardMapper.findTacticsUrl", url);
 	}
 }

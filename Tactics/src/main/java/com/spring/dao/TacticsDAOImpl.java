@@ -15,8 +15,8 @@ public class TacticsDAOImpl implements TacticsDAO {
 	SqlSession sql;
 	
 	@Override // 내 전술 목록
-	public List<TacticsVO> tacticsList(String user_id) throws Exception {
-		return sql.selectList("tacticsMapper.tacticsList", user_id);
+	public List<TacticsVO> tacticsList(String userId) throws Exception {
+		return sql.selectList("tacticsMapper.tacticsList", userId);
 	}
 	
 	@Override // 전술 불러오기

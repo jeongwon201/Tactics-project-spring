@@ -7,7 +7,7 @@ public class ReplyVO {
 	private int bno;
 	private int rno;
 	private String content;
-	private String writer;
+	private String userId;
 	private Date regdate;
 	public int getBno() {
 		return bno;
@@ -27,11 +27,11 @@ public class ReplyVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getWriter() {
-		return writer;
+	public String getUserId() {
+		return userId;
 	}
-	public void setWriter(String writer) {
-		this.writer = writer;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public Date getRegdate() {
 		return regdate;
@@ -42,7 +42,7 @@ public class ReplyVO {
 	
 	@Override
 	public String toString() {
-		return "ReplyVO [bno=" + bno + ", rno=" + rno + ", content=" + content + ", writer=" + writer + ", regdate="
+		return "ReplyVO [bno=" + bno + ", rno=" + rno + ", content=" + content + ", userId=" + userId + ", regdate="
 				+ regdate + "]";
 	}
 }

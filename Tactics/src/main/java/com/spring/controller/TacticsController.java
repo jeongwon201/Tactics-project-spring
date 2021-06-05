@@ -39,9 +39,9 @@ public class TacticsController {
 		logger.info("tactics");
 
 		MemberVO memberVO = (MemberVO) session.getAttribute("member");
-		String user_id = memberVO.getUserId();
+		String userId = memberVO.getUserId();
 
-		model.addAttribute("tacticsList", service.tacticsList(user_id));
+		model.addAttribute("tacticsList", service.tacticsList(userId));
 	}
 
 	// 전술 불러오기
@@ -51,12 +51,12 @@ public class TacticsController {
 		logger.info("tacticsLoad");
 
 		MemberVO memberVO = (MemberVO) session.getAttribute("member");
-		String user_id = memberVO.getUserId();
+		String userId = memberVO.getUserId();
 		String title = req.getParameter("title");
 
 		TacticsVO tacticsVO = new TacticsVO();
 		tacticsVO.setTitle(title);
-		tacticsVO.setUser_id(user_id);
+		tacticsVO.setUserId(userId);
 
 		tacticsVO = service.tacticsLoad(tacticsVO);
 		String url = tacticsVO.getUrl();
@@ -84,12 +84,12 @@ public class TacticsController {
 		int result;
 		try {
 			MemberVO memberVO = (MemberVO) session.getAttribute("member");
-			String user_id = memberVO.getUserId();
+			String userId = memberVO.getUserId();
 			String title = req.getParameter("title");
 
 			TacticsVO tacticsVO = new TacticsVO();
 			tacticsVO.setTitle(title);
-			tacticsVO.setUser_id(user_id);
+			tacticsVO.setUserId(userId);
 
 			try {
 				tacticsVO = service.tacticsLoad(tacticsVO);
@@ -115,7 +115,7 @@ public class TacticsController {
 		return result;
 	}
 
-	//전수 저장
+	//전술 저장
 	@RequestMapping(value = "tacticsSave", method = RequestMethod.POST)
 	@ResponseBody
 	public int tacticsSave(HttpServletRequest req, HttpSession session) throws Exception {
@@ -124,13 +124,12 @@ public class TacticsController {
 		int result;
 		try {
 			MemberVO memberVO = (MemberVO) session.getAttribute("member");
-			String user_id = memberVO.getUserId();
+			String userId = memberVO.getUserId();
 
 			String textSaveName = req.getParameter("textSaveName");
 			String scene = req.getParameter("sceneJson");
 
-			String fileName = "C:\\Users\\jeong\\git\\Project\\Tactics\\src\\main\\webapp\\resources\\save\\" + user_id + "_" + textSaveName
-					+ ".txt";
+			String fileName = "C:\\Users\\jeong\\git\\Project\\Tactics\\src\\main\\webapp\\resources\\save\\" + userId + "_" + textSaveName + ".txt";
 
 			try {
 				BufferedWriter fw = new BufferedWriter(new FileWriter(fileName));
@@ -143,13 +142,13 @@ public class TacticsController {
 
 			TacticsVO chkTacticsVO = new TacticsVO();
 			chkTacticsVO.setTitle(textSaveName);
-			chkTacticsVO.setUser_id(user_id);
+			chkTacticsVO.setUserId(userId);
 
 			if (service.tacticsChk(chkTacticsVO) == 0) {
 				TacticsVO tacticsVO = new TacticsVO();
 				tacticsVO.setTitle(textSaveName);
 				tacticsVO.setUrl(fileName);
-				tacticsVO.setUser_id(user_id);
+				tacticsVO.setUserId(userId);
 
 				service.tacticsInsert(tacticsVO);
 			}

@@ -30,7 +30,7 @@
 									<td>
 										<a href="/board/readView?bno=${list.bno}&page=${scri.page}&perPageNum=${scri.perPageNum}&searchType=${scri.searchType}&keyword=${scri.keyword}"><c:out value="${list.title}" /></a>
 									</td>
-									<td><c:out value="${list.writer}" /></td>
+									<td><c:out value="${list.userId}" /></td>
 									<td><fmt:formatDate value="${list.regdate}" pattern="yyyy-MM-dd"/></td>
 									<td><c:out value="${list.hit}" /></td>
 								</tr>
